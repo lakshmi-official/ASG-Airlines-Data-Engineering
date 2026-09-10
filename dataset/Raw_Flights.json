@@ -1,0 +1,50 @@
+{
+	"name": "Raw_Flights",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlob_Airlines",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "flights",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "raw"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "flight_id",
+				"type": "String"
+			},
+			{
+				"name": "airline",
+				"type": "String"
+			},
+			{
+				"name": "source",
+				"type": "String"
+			},
+			{
+				"name": "destination",
+				"type": "String"
+			},
+			{
+				"name": "departure_time",
+				"type": "String"
+			},
+			{
+				"name": "arrival_time",
+				"type": "String"
+			},
+			{
+				"name": "duration",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

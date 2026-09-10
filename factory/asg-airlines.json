@@ -1,0 +1,15 @@
+{
+	"name": "asg-airlines",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "02dfe8df-b53e-475b-966a-e36296fbe3d6",
+		"tenantId": "6b610bf3-844a-42eb-9d48-0992d0e25683"
+	}
+}

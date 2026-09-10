@@ -1,0 +1,86 @@
+{
+	"name": "Clean_Flights",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Raw_Flights",
+						"type": "DatasetReference"
+					},
+					"name": "RawFlights"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Clean_Flights_CSV",
+						"type": "DatasetReference"
+					},
+					"name": "CleanFlightsSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectFlights"
+				},
+				{
+					"name": "DeriveFlightFields"
+				},
+				{
+					"name": "ValidFlights"
+				},
+				{
+					"name": "DeduplicateFlights"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          flight_id as string,",
+				"          airline as string,",
+				"          source as string,",
+				"          destination as string,",
+				"          departure_time as string,",
+				"          arrival_time as string,",
+				"          duration as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> RawFlights",
+				"RawFlights select(mapColumn(",
+				"          flight_id,",
+				"          airline,",
+				"          source,",
+				"          destination,",
+				"          departure_time,",
+				"          arrival_time,",
+				"          duration",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectFlights",
+				"SelectFlights derive(flight_id = upper(trim(flight_id)),",
+				"          airline = trim(airline),",
+				"          source = upper(trim(source)),",
+				"          destination = upper(trim(destination)),",
+				"          departure_ts = toTimestamp(departure_time, \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\"),",
+				"          arrival_ts = toTimestamp(arrival_time, \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\"),",
+				"          duration_minutes = (toLong(toTimestamp(arrival_time, \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\")) - toLong(toTimestamp(departure_time, \"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\"))) / 60000) ~> DeriveFlightFields",
+				"DeriveFlightFields filter(!isNull(flight_id)) ~> ValidFlights",
+				"ValidFlights aggregate(groupBy(flight_id,",
+				"          airline,",
+				"          source,",
+				"          destination,",
+				"          departure_ts,",
+				"          arrival_ts),",
+				"     duration_minutes = first(duration_minutes)) ~> DeduplicateFlights",
+				"DeduplicateFlights sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['clean_flights.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> CleanFlightsSink"
+			]
+		}
+	}
+}

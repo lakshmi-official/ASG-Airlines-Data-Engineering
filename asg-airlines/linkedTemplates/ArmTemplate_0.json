@@ -409,6 +409,36 @@
 							},
 							"traceLevel": "Coarse"
 						}
+					},
+					{
+						"name": "Protect_Passenger_PII",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Protect_Passenger_PII",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"RawPassengers": {},
+									"ProtectedPassengers": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Coarse"
+						}
 					}
 				],
 				"policy": {
@@ -418,7 +448,8 @@
 				"lastPublishTime": "2026-09-10T07:53:41Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/Clean_Flights')]"
+				"[concat(variables('factoryId'), '/dataflows/Clean_Flights')]",
+				"[concat(variables('factoryId'), '/dataflows/Protect_Passenger_PII')]"
 			]
 		}
 	]

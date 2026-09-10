@@ -1,0 +1,57 @@
+{
+	"name": "PII_protection",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlob_Airlines",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "passengers",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "raw"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "passenger_id",
+				"type": "String"
+			},
+			{
+				"name": "first_name",
+				"type": "String"
+			},
+			{
+				"name": "last_name",
+				"type": "String"
+			},
+			{
+				"name": "age",
+				"type": "String"
+			},
+			{
+				"name": "gender",
+				"type": "String"
+			},
+			{
+				"name": "email",
+				"type": "String"
+			},
+			{
+				"name": "phone",
+				"type": "String"
+			},
+			{
+				"name": "aadhaar_id",
+				"type": "String"
+			},
+			{
+				"name": "date_of_birth",
+				"type": "String"
+			}
+		]
+	}
+}

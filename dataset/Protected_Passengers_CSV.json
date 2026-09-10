@@ -1,0 +1,24 @@
+{
+	"name": "Protected_Passengers_CSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlob_Airlines",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "protected_passengers.csv",
+				"folderPath": "passengers",
+				"container": "clean"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
